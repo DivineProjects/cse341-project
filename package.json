@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/DivineProjects/cse341-project#readme",
   "dependencies": {
-    "express": "^4.21.1"
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mogodb": "^0.0.1-security",
+    "mongodb": "^6.11.0"
   }
 }
