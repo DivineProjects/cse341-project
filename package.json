@@ -17,9 +17,14 @@
   },
   "homepage": "https://github.com/DivineProjects/cse341-project#readme",
   "dependencies": {
+    "autogen": "^0.0.1",
+    "body-parser": "^1.20.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "mogodb": "^0.0.1-security",
-    "mongodb": "^6.11.0"
+    "mongodb": "^6.11.0",
+    "swagger": "^0.7.5",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1"
   }
 }

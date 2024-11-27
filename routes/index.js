@@ -1,8 +1,14 @@
-const express = require('express');
-const router = express.Router();
+const routes = require("express").Router();
 
-router.get("/", (req, res) => {
-    res.send('Hello from the root route');
+routes.use("/", require("./swagger"));
+
+routes.get('/', (req, res) => {
+  // #swagger.tags=["Hello World"]
+    res.send("Home Page ...");
   });
-  
-  module.exports = router;
+
+routes.use("/users", require("./users"));
+routes.use("/stocks", require("./stocks"));
+
+
+module.exports = routes;

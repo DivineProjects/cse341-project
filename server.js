@@ -1,10 +1,22 @@
 const express = require("express");
 const app = express();
 const mongodb = require("./data/database");
-const PORT = 8081;
+const bodyParser = require("body-parser");
 
+const PORT = 8081;
 const port = process.env.PORT || PORT;
 
+app.use(bodyParser.json());
+// CORS middleware to allow cross-origin requests
+app.use((req, res, next) => {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Allow all domains, or specify a domain
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Z-Key'); // Allow these headers
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allow these methods
+  
+  next();
+});
 // Use routes defined in routes/index.js
 app.use("/", require("./routes"));
 
