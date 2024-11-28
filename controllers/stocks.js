@@ -21,8 +21,8 @@ const getSingle = async (req, res) => {
     // Fetch the database and the "stockSummary" collection
     const db = mongodb.getDatabase();
     const result = await db.collection("stockSummary").find({ symbol: stockSymbol });
-
-    if (result.toArray().length === 0) {
+    const resultLength = result.toArray();
+    if (resultLength.length === 0) {
       return res.status(404).json({ message: "Stock not found" });
     }
     result.toArray().then((stocks) => {

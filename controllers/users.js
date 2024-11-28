@@ -31,10 +31,11 @@ const getSingle = async (req, res) => {
     // Query the database for the user by the validated user_id
     const db = mongodb.getDatabase();
     const result = await db.collection("users").find({ _id: userId });
-    
-    if (result.toArray().length === 0) {
+    const resultLength = result.toArray();
+    if (resultLength.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
+    
     // Fetch the database and the "users" collection
     
     result.toArray().then((users) => {
