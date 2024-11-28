@@ -17,13 +17,22 @@ const getAll = async (req, res) => {
 const getSingle = async (req, res) => {
   // #swagger.tags=["Stocks"]
   const stockSymbol = req.params.symbol;
-  // Fetch the database and the "stockSummary" collection
-  const db = mongodb.getDatabase();
-  const result = await db.collection("stockSummary").find({ symbol: stockSymbol });
-  result.toArray().then((stocks) => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(stocks[0]);
+  try {
+    // Fetch the database and the "stockSummary" collection
+    const db = mongodb.getDatabase();
+    const result = await db.collection("stockSummary").find({ symbol: stockSymbol });
+
+    if (result.toArray().length === 0) {
+      return res.status(404).json({ message: "Stock not found" });
+    }
+    result.toArray().then((stocks) => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(stocks[0]);
   });
+  } catch (err) {
+    return res.status(500).json({ message: "Server error" });
+  }
+  
 };
 
 const createStock = async (req, res) => {
