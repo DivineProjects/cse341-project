@@ -49,7 +49,7 @@ const userValidationRules = () => {
 const userIdValidationRules = () => {
   return [
     // Validate user id as a MongoDB ObjectID
-    param('id').isMongoId().withMessage('Invalid user ID format'),
+    param('id').isMongoId().withMessage('Invalid user ID'),
   ];
 }
 

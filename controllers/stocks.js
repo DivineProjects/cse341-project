@@ -2,7 +2,6 @@ const { response } = require("express");
 const mongodb = require("../data/database");
 const ObjectId = require("mongodb").ObjectId;
 
-
 const getAll = async (req, res) => {
   // #swagger.tags=["Stocks"]
   // Fetch the database and collection
@@ -21,16 +20,16 @@ const getSingle = async (req, res) => {
     // Fetch the database and the "stockSummary" collection
     const db = mongodb.getDatabase();
     const result = await db.collection("stockSummary").find({ symbol: stockSymbol });
-    const resultLength = result.toArray();
-    if (resultLength.length === 0) {
-      return res.status(404).json({ message: "Stock not found" });
-    }
-    result.toArray().then((stocks) => {
+
+    result.toArray().then((stock) => {
+      if (Object.keys(stock).length === 0) {
+        return res.status(404).json({ message: `${stockSymbol} not found` });
+      }
       res.setHeader("Content-Type", "application/json");
-      res.status(200).json(stocks[0]);
+      res.status(200).json(stock[0]);
   });
   } catch (err) {
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Error Fetching all Stocks" });
   }
   
 };
@@ -57,10 +56,10 @@ const createStock = async (req, res) => {
   const db = mongodb.getDatabase();
   const response = await db.collection("stockSummary").insertOne(stock);
   if (response.acknowledged){
-    res.status(204).send();
+    res.status(201).send();
   } else
   {
-    res.status(500).json(response.error || "Some error occured while creating the stock")
+    res.status(500).json(response.error || "Failed to creat the stock")
   }
 };
 
@@ -88,7 +87,7 @@ const updateStock = async (req, res) => {
     res.status(204).send();
   } else
   {
-    res.status(500).json(response.error || "Some error occured while updating the stock")
+    res.status(500).json(response.error || "Failed to update the stock")
   }
 };
 
@@ -101,7 +100,7 @@ const deleteStock = async (req, res) => {
     res.status(204).send();
   } else
   {
-    res.status(500).json(response.error || "Some error occured while delete the stock")
+    res.status(500).json(response.error || "Failed to delete the stock")
   }
 };
 

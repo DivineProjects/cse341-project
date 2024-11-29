@@ -20,30 +20,23 @@ const getAll = async (req, res) => {
 
 const getSingle = async (req, res) => {
   // #swagger.tags=["Users"]
-  const { id } = req.params;
-
-  // Validate if the id is a valid MongoDB ObjectId
-  if (!ObjectId.isValid(id)) {
-    return res.status(400).json({ message: 'Invalid user ID format' });
-  }
-  const userId = new ObjectId(id);
+  
+  const userId = new ObjectId(req.params.id);
   try {
     // Query the database for the user by the validated user_id
     const db = mongodb.getDatabase();
     const result = await db.collection("users").find({ _id: userId });
-    const resultLength = result.toArray();
-    if (resultLength.length === 0) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    
     // Fetch the database and the "users" collection
     
-    result.toArray().then((users) => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(users[0]);
+    result.toArray().then((user) => {
+      if (Object.keys(user).length === 0) {
+        return res.status(404).json({ message: `${userId} not found` });
+      }
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(user[0]);
   });
   } catch (err) {
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error", error: err.message });
   }
   
 };
@@ -72,7 +65,7 @@ const createUser = async (req, res) => {
   const db = mongodb.getDatabase();
   const response = await db.collection("users").insertOne(user);
   if (response.acknowledged){
-    res.status(204).send();
+    res.status(201).send();
   } else
   {
     res.status(500).json(response.error || "Some error occured while creating the user")
