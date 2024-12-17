@@ -1,5 +1,6 @@
 const routes = require("express").Router();
 const controller = require("../controllers/users");
+const { isAuthenticated } = require("../middleware/authenticate")
 const { userValidationRules, validate } = require('../validators/userValidationRules'); // validation rules
 
 // Route to get all users
@@ -21,7 +22,7 @@ routes.get("/:id", async (req, res) => {
 });
 
 // Route to create a user
-routes.post("/", userValidationRules(), validate, async (req, res) => {
+routes.post("/", isAuthenticated, userValidationRules(), validate, async (req, res) => {
     try {
       await controller.createUser(req, res);
     } catch (err) {
@@ -30,7 +31,7 @@ routes.post("/", userValidationRules(), validate, async (req, res) => {
 });
 
 // Route to update a user by ID
-routes.put("/:id", userValidationRules(), validate, async (req, res) => {
+routes.put("/:id", isAuthenticated, userValidationRules(), validate, async (req, res) => {
     try {
       await controller.updateUser(req, res);
     } catch (err) {
@@ -39,7 +40,7 @@ routes.put("/:id", userValidationRules(), validate, async (req, res) => {
   });
   
   // Route to delete a user by ID
-routes.delete("/:id", async (req, res) => {
+routes.delete("/:id", isAuthenticated, async (req, res) => {
     try {
       await controller.deleteUser(req, res);
     } catch (err) {

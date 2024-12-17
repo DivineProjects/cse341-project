@@ -5,7 +5,7 @@ const doc = {
         title: "stocks Api",
         description: "Stocks Api"
     },
-    host: "localhost:8081",
+    host: "localhost:8080",
     schemes: ["http"]
 };
 

@@ -1,5 +1,6 @@
 const routes = require("express").Router();
 const controller = require("../controllers/stocks");
+const { isAuthenticated } = require("../middleware/authenticate")
 const { stockValidationRules, getSingleValidationRules, validate } = require('../validators/stockValidationRules'); // import validation rules
 
 // Get all stocks
@@ -24,7 +25,7 @@ routes.get("/:symbol", getSingleValidationRules(), validate, async (req, res) =>
 });
 
 // Create a new stock
-routes.post("/", stockValidationRules(), validate, async (req, res) => {
+routes.post("/", isAuthenticated, stockValidationRules(), validate, async (req, res) => {
     try {
       await controller.createStock(req, res);
     } catch (error) {
@@ -33,7 +34,7 @@ routes.post("/", stockValidationRules(), validate, async (req, res) => {
 });
   
 // Update an existing stock
-routes.put("/:id", stockValidationRules(), validate, async (req, res) => {
+routes.put("/:id", isAuthenticated, stockValidationRules(), validate, async (req, res) => {
     try {
         await controller.updateStock(req, res);
     } catch (error) {
@@ -45,7 +46,7 @@ routes.put("/:id", stockValidationRules(), validate, async (req, res) => {
 });
 
 // Delete a stock
-routes.delete("/:id", async (req, res) => {
+routes.delete("/:id", isAuthenticated, async (req, res) => {
     try {
         await controller.deleteStock(req, res);
     } catch (error) {
